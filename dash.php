@@ -136,6 +136,8 @@ $eid=@$_GET['eid'];
 $sn=@$_GET['n'];
 $total=@$_GET['t'];
 $session=$_SESSION['key'];
+// $type=$_SESSION['type'];
+
 $q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' AND sn='$sn' " );
 echo '<div class="panel" style="margin:5%">';
 while($row=mysqli_fetch_array($q) )
@@ -154,7 +156,7 @@ $option=$row['option'];
 $optionid=$row['optionid'];
 echo'<input type="radio" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
 }
-echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
+// echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
 $sn1=$sn;  
 $sn2=$sn;
 if($sn2+1>$total)
@@ -196,7 +198,7 @@ while($row=mysqli_fetch_array($q12) )
 $name=$row['name'];
 }
 $c++;
-echo '<tr><td style="color:#99cc32"><b>'.$c.'</b></td><td>'.$name.'</td><td>'.$e.'</td><td>'.$s.'</td><td>';
+echo '<tr><td style="color:black"><b>'.$c.'</b></td><td>'.$name.'</td><td>'.$e.'</td><td>'.$s.'</td><td>';
 }
 echo '</table></div>';}
 
@@ -228,20 +230,21 @@ echo '</table></div>';
 
 <!--feedback start-->
 <?php if(@$_GET['q']==3) {
-$result = mysqli_query($con,"SELECT * FROM `feedback` ORDER BY `feedback`.`date` DESC") or die('Error');
+$result = mysqli_query($con,"SELECT * FROM `feedback`") or die('<div class="panel">No feedbacks!!</div>');
 echo  '<div class="panel"><table class="table table-striped title1">
-<tr><td><b>S.N.</b></td><td><b>Subject</b></td><td><b>Email</b></td><td><b>Date</b></td><td><b>Time</b></td><td><b>By</b></td><td></td><td></td></tr>';
+<tr><td><b>S.N.</b></td><td><b>Subject</b></td><td><b>Email</b></td><td><b>Feedback</b></td></tr>';
 $c=1;
 while($row = mysqli_fetch_array($result)) {
-	$date = $row['date'];
-	$date= date("d-m-Y",strtotime($date));
-	$time = $row['time'];
+	//$date = $row['date'];
+	//$date= date("d-m-Y",strtotime($date));
+	//$time = $row['time'];
 	$subject = $row['subject'];
-	$name = $row['name'];
+	//$name = $row['name'];
 	$email = $row['email'];
 	$id = $row['id'];
+  $feedback=$row['feedback'];
 	 echo '<tr><td>'.$c++.'</td>';
-	echo '<td><a title="Click to open feedback" href="dash.php?q=3&fid='.$id.'">'.$subject.'</a></td><td>'.$email.'</td><td>'.$date.'</td><td>'.$time.'</td><td>'.$name.'</td>
+	echo '<td><a title="Click to open feedback" href="dash.php?q=3&fid='.$id.'">'.$subject.'</a></td><td>'.$email.'</td><td>'.$feedback.'</td>
 	<td><a title="Open Feedback" href="dash.php?q=3&fid='.$id.'"><b><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></b></a></td>';
 	echo '<td><a title="Delete Feedback" href="update.php?fdid='.$id.'"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td>
 
@@ -337,6 +340,13 @@ echo '
   </div>
 </div>
 
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-12 control-label" for="type"></label>  
+  <div class="col-md-12">
+  <textarea rows="3" cols="4" id="type" name="type" class="form-control" placeholder="Write display type here: all at once [0] or one by one [1] "></textarea>  
+  </div>
+</div>
 
 <!-- Text input-->
 <div class="form-group">
@@ -372,7 +382,14 @@ echo '
  <div class="col-md-3"></div><div class="col-md-6"><form class="form-horizontal title1" name="form" action="update.php?q=addqns&n='.@$_GET['n'].'&eid='.@$_GET['eid'].'&ch=4 "  method="POST">
 <fieldset>
 ';
- 
+// if($type)
+// {
+//   echo $_SESSION['type'];
+// }
+// else
+// {
+//   echo 'No!';
+// }
  for($i=1;$i<=@$_GET['n'];$i++)
  {
 echo '<b>Question number&nbsp;'.$i.'&nbsp;:</><br /><!-- Text input-->

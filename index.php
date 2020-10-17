@@ -22,10 +22,10 @@ function validateForm()
   var y = document.forms["form"]["name"].value;	
   var letters = /^[A-Za-z]+$/;if (y == null || y == "") {alert("Name must be filled out.");
   return false;}
-  var z =document.forms["form"]["regno"].value;
-  if (z == null || z == "") 
-    {alert("regno must be filled out.");
-  return false;}
+  // var z =document.forms["form"]["regno"].value;
+  // if (z == null || z == "") 
+  //   {alert("regno must be filled out.");
+  // return false;}
   var x = document.forms["form"]["email"].value;
   var atpos = x.indexOf("@");
   var dotpos = x.lastIndexOf(".");
@@ -50,8 +50,8 @@ function validateForm()
 
 <body>
 <div class="header" style="background: #b92b27;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #1565C0, #b92b27);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #1565C0, #b92b27); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: -webkit-linear-gradient(to right, #2b65C0, #b92b27);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #1565C0, #2be442); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 ">
 <div class="row">
 <div class="col-lg-6">
@@ -108,14 +108,14 @@ background: linear-gradient(to right, #1565C0, #b92b27); /* W3C, IE 10+/ Edge, F
 
 <div class="bg1" style="background: #FFE000;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #799F0C, #FFE000);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #799F0C, #FFE000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 ">
 <div class="row">
 
 <div class="col-md-7"></div>
 <div class="col-md-4 panel" style="background: rgba(0,0,0,0.6);">
 <!-- sign in form begins -->  
-  <form class="form-horizontal" name="form" action="sign.php?q=account.php" onSubmit="return validateForm()" method="POST">
+  <form class="form-horizontal" name="form" action="sign.php?q=account.php" onSubmit="return validateForm()" id="submit" method="POST">
 <fieldset>
   <h3 style="text-align: center;color:white;margin-top: 10px">Register</h3>
 
@@ -141,14 +141,14 @@ background: linear-gradient(to right, #799F0C, #FFE000); /* W3C, IE 10+/ Edge, F
 </div>
 
 <!-- Text input-->
-<div class="form-group">
+<!-- <div class="form-group">
   <label class="col-md-12 control-label" for="regno"></label>  
   <div class="col-md-12">
   <input id="regno" name="regno" placeholder="Enter your regno" class="form-control input-md" type="text">
     
   </div>
 </div>
-
+ -->
 
 <!-- Text input-->
 <div class="form-group">
@@ -181,17 +181,17 @@ background: linear-gradient(to right, #799F0C, #FFE000); /* W3C, IE 10+/ Edge, F
 <div class="form-group">
   <label class="col-md-12control-label" for="cpassword"></label>
   <div class="col-md-12">
-    <input id="cpassword" name="cpassword" placeholder="Conform Password" class="form-control input-md" type="password">
+    <input id="cpassword" name="cpassword" placeholder="Confirm Password" class="form-control input-md" type="password">
     
   </div>
 </div>
 <?php if(@$_GET['q7'])
-{ echo'<p style="color:red;font-size:15px;">'.@$_GET['q7'];}?>
+{ echo'<p style="color:black;font-size:15px;">'.@$_GET['q7'];}?>
 <!-- Button -->
 <div class="form-group">
   <label class="col-md-12 control-label" for=""></label>
   <div class="col-md-12"> 
-    <input  type="submit" class="sub" value="sign up" class="btn btn-primary" style="background: rgba(0,255,0,0.3);color:white" />
+    <input type="submit" class="submit" value="sign up" class="btn btn-primary" style="background: rgba(0,255,0,0.3);color:white" />
   </div>
 </div>
 
@@ -203,7 +203,7 @@ background: linear-gradient(to right, #799F0C, #FFE000); /* W3C, IE 10+/ Edge, F
 
 <!--Footer start-->
 <div class="row footer">
-<div class="col-md-6 box">
+ <div class="col-md-6 box">
 <a href="" target="_blank">About us</a>
 </div>
 <div class="col-md-6 box">

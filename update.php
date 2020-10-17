@@ -58,6 +58,7 @@ $tag = $_POST['tag'];
 $desc = $_POST['desc'];
 $id=uniqid();
 $GLOBALS['$temp'] = $id;
+$type=$_POST['type'];
 $q3=mysqli_query($con,"INSERT INTO quiz VALUES  ('$id','$name' , '$sahi' , '$wrong','$total','$time' ,'$desc','$tag', NOW())");
 
 header("location:dash.php?q=4&step=2&eid=$id&n=$total");
@@ -106,14 +107,13 @@ break;
 default:
 $ansid=$oaid;
 }
-
-
 $qans=mysqli_query($con,"INSERT INTO answer VALUES  ('$qid','$ansid')");
 
  }
 header("location:dash.php?q=0");
 }
 }
+//add admin
 if(isset($_SESSION['key'])){
 if(@$_GET['q']== 'addadmin' && $_SESSION['key']=='admin') {
 $name = $_POST['name'];
@@ -121,6 +121,8 @@ $name= ucwords(strtolower($name));
 $uname = $_POST['uname'];
 $email = $_POST['email'];
 $password = $_POST['password'];
+$password=md5($password);
+$password=md5($password);
 $mobile = $_POST['mobile'];
 $q3=mysqli_query($con,"INSERT INTO admin VALUES  ('$name','$uname','$email','$password','$mobile')");
 
@@ -294,15 +296,15 @@ header("location:dash.php?q=quiz&step=2&eid=$eid&n=$sn&t=$total")or die('Error15
 
 //add feedback
 if(@$_GET['q']== 'addfeedback') {
-$name = $_POST['name'];
-$name= ucwords(strtolower($name));
+//$name = $_POST['name'];
+//$name= ucwords(strtolower($name));
 $email = $_POST['email'];
 $subject = $_POST['subject'];
 $feedback = $_POST['feedback'];
-$date = $_POST['date'];
-$time = $_POST['time'];
+// $date = $_POST['date'];
+// $time = $_POST['time'];
 $id=$_POST['id'];
-$q3=mysqli_query($con,"INSERT INTO feedback(`name`,`email`,`subject`,`feedback`,`date`,`time`) VALUES ('$name','$email','$subject','$feedback','$date','$time')");
+$q3=mysqli_query($con,"INSERT INTO feedback(`email`,`subject`,`feedback`) VALUES ('$email','$subject','$feedback')");
 header("location:account.php?q=4");
 }
 

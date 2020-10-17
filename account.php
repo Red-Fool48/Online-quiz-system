@@ -11,7 +11,24 @@
  <link  rel="stylesheet" href="css/font.css">
  <script src="js/jquery.js" type="text/javascript"></script>
 
- 
+<!-- <script type="text/javascript">
+  function timeout()
+  {
+    var minute=Math.floor($difference/60);
+    var second=($difference%60);
+     if($difference<=0)
+     {
+      document.getElementById(("quiz")).submit();
+     }
+     else
+     {
+      document.getElementById("timer").innerHTML=minute+":"+second;
+     }
+     $difference--;
+     var setTimeout(function(){timeout()},1000);
+  }
+</script>
+ --> 
   <script src="js/bootstrap.min.js"  type="text/javascript"></script>
 <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
  <!--alert message-->
@@ -67,8 +84,11 @@ echo '<span class="pull-right top title1" ><span class="log1"><span class="glyph
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-          <li <?php if(@$_GET['q']==1) echo'class="active"'; ?> ><a href="account.php?q=1"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home<span class="sr-only">(current)</span>
-         </a></li>
+          <li <?php if(@$_GET['q']==1) echo'class="active"'; ?> ><a href="account.php?q=1"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home<span class="sr-only">
+            <form name="search" action ="account.php?q=1" method="POST"> 
+            <input id="search" type="text" id ="search" placeholder="Type here">
+            <input id="submit" type="submit" value="Search">
+            </form></span></a></li>
           <li <?php if(@$_GET['q']==2) echo'class="active"'; ?>><a href="account.php?q=2"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;History</a></li>
 		      <li <?php if(@$_GET['q']==3) echo'class="active"'; ?>><a href="account.php?q=3"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;Ranking</a></li>
           <li class="dropdown <?php if(@$_GET['q']==4 || @$_GET['q']==15) echo'active"'; ?>">
@@ -89,18 +109,50 @@ echo '<span class="pull-right top title1" ><span class="log1"><span class="glyph
 <div class="col-md-12">
 
 <!--home start-->
+<!-- <form name="search" action ="account.php?q=1" method="GET"> 
+<input id="search" type="text" id ="search" name="search" placeholder="Type here"/>
+<input id="submit" type="submit" value="Search"/>
+</form> -->
 <?php if(@$_GET['q']==1) {
+echo '
+<div class="search"></div>
+<form name="search" action ="account.php?q=1" method="post"> 
+<input id="search" type="text" id ="search" name="search" placeholder="Type here"/>
+<input id="submit" type="submit" value="search"/>
+</form>
+ ';
+$search="";
+if(isset($_POST['search']))
+{
+  $search=$_POST['search'];
+}
+if(isset($search))
+{
+  echo $search;
+}
+//$search = $_GET['search'];
+$result = mysqli_query($con,"SELECT * FROM quiz where tag like '%$search%'");
 
-$result = mysqli_query($con,"SELECT * FROM quiz ORDER BY date DESC") or die('Error');
-echo  '<div class="panel"><table class="table table-striped title1">
-<tr><td><b>S.N.</b></td><td><b>Topic</b></td><td><b>Total question</b></td><td><b>Marks</b></td><td><b>Time limit</b></td><td></td></tr>';
 $c=1;
+if(mysqli_num_rows($result)==0)
+{
+  error_reporting(0);
+  echo '<div class="panel"><table class="table table-striped title1">"No quizzes!!"</table></div>';
+}
+
+elseif($result)
+{
+  echo  '<div class="panel"><table class="table table-striped title1">
+<tr><td><b>S.N.</b></td><td><b>Topic</b></td><td><b>Total question</b></td><td><b>Marks</b></td><td><b>Time limit</b></td><td></td></tr>';
 while($row = mysqli_fetch_array($result)) {
 	$title = $row['title'];
 	$total = $row['total'];
 	$sahi = $row['sahi'];
-    $time = $row['time'];
+  $time = $row['time'];
 	$eid = $row['eid'];
+}
+
+$search="";
 $q12=mysqli_query($con,"SELECT score FROM history WHERE eid='$eid' AND email='$email'" )or die('Error98');
 $rowcount=mysqli_num_rows($q12);	
 if($rowcount == 0){
@@ -113,31 +165,31 @@ echo '<tr style="color:black"><td>'.$c++.'</td><td>'.$title.'&nbsp;<span title="
 	<td><b><a href="" class="pull-right btn sub1" style="margin:0px;background:grey"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;<span class="title1"><b>Done</b></span></a></b></td></tr>';
 }
 }
+
 $c=0;
 echo '</table></div>';
-
-}?>
-
-<!-- <script>
-var seconds = 40;
-    function secondPassed() {
-    var minutes = Math.round((seconds - 30)/60);
-    var remainingSeconds = seconds % 60;
-    if (remainingSeconds < 10) {
-        remainingSeconds = "0" + remainingSeconds; 
-    }
-    document.getElementById('countdown').innerHTML = minutes + ":" +    remainingSeconds;
-    if (seconds == 0) {
-        clearInterval(countdownTimer);
-        document.getElementById('countdown').innerHTML = "Buzz Buzz";
-    } else {    
-        seconds--;
-    }
-    }
-var countdownTimer = setInterval('secondPassed()', 1000);
-</script> -->
-
-<!--quiz start-->
+}
+// <!-- <script>
+// var seconds = 40;
+//     function secondPassed() {
+//     var minutes = Math.round((seconds - 30)/60);
+//     var remainingSeconds = seconds % 60;
+//     if (remainingSeconds < 10) {
+//         remainingSeconds = "0" + remainingSeconds; 
+//     }
+//     document.getElementById('countdown').innerHTML = minutes + ":" +    remainingSeconds;
+//     if (seconds == 0) {
+//         clearInterval(countdownTimer);
+//         document.getElementById('countdown').innerHTML = "Buzz Buzz";
+//     } else {    
+//         seconds--;
+//     }
+//     }
+// var countdownTimer = setInterval('secondPassed()', 1000);
+// </script>
+//  -->
+// <!--quiz start-->
+?>
 <?php
 if(@$_GET['q']== 'quiz' && @$_GET['step']== 2) {
 $eid=@$_GET['eid'];
@@ -153,69 +205,136 @@ if(!isset($_SESSION['time_started'])){
     $_SESSION['time_started'] = time();
     $_SESSION['countdown'] = $timer*60;
 }
-$now = time();
- 
+$now=time();
+$_SESSION['timer']=$timer;
+$_SESSION['start_time']=date('Y-m-d H:i:s');
+$end_time=date('Y-m-d H:i:s',strtotime('+'.$_SESSION['timer'].'minutes'));
+$_SESSION['end_time']=$end_time;
+//header('location:temp.php');
+// $from_time=date('Y-m-d H:i:s');
+// $to_time=$_SESSION["end_time"];
+// $timefirst=strtotime($from_time);
+// $timesecond=strtotime($to_time);
+// $difference=$timesecond-$timefirst;
+// echo gmdate("i:s",$difference);
 $timeSince = $now - $_SESSION['time_started']; 
 $remainingSeconds = ($_SESSION['countdown'] - $timeSince);
-echo $remainingSeconds;
+//header("location:temp.php");
+// echo $remainingSeconds;
 if($remainingSeconds==0)
 {
   echo '<script>alert("OVER!!!");</script>';
   $remainingSeconds=0;
 }
 
-elseif($remainingSeconds>0)
-{
-  header("Refresh:1");
+// AND sn='$sn'
 
-}
-$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' AND sn='$sn' " );
+
+$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid'  " );
 echo '<div class="panel" style="margin:5%">';
+
 while($row=mysqli_fetch_array($q))
 {
 $qns=$row['qns'];
 $qid=$row['qid'];
 echo '<b>Question &nbsp;'.$sn.'&nbsp;::<br />'.$qns.'</b><br /><br />';
-}
-$q=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
+$q1=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
 echo '<form id ="quiz" action="update.php?q=quiz&step=2&eid='.$eid.'&n='.$sn.'&t='.$total.'&qid='.$qid.'" method="POST"  class="form-horizontal">
 <br />';
-
-while($row=mysqli_fetch_array($q) )
+while($row=mysqli_fetch_array($q1) )
 {
 $option=$row['option'];
 $optionid=$row['optionid'];
-echo'<input type="radio" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
+echo'<input type="checkbox" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
+}
+$sn+=1;
 }
 echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
-if($remainingSeconds==0)
-{
-  window.setInterval(function(){ 
-    document.getElementById("quiz").submit(); 
-}, 2000);
-}
-$sn1=$sn;  
-$sn2=$sn;
-if($sn2+1>$total)
-{
-  $sn2=$sn2;
-}
-else
-{
-  $sn2+=1;
-}
-if($sn1-1==0)
-{
-  $sn1=1;
-}
-else
-{
-  $sn1-=1;
-}
+$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' AND sn='$sn' " );
+echo '<div class="panel" style="margin:5%">';
 
-echo '<br/><tr><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo;</a></button></td></tr>';
+// if($_SESSION["type"]==1)
+// {
+
+// }
+// while($row=mysqli_fetch_array($q))
+// {
+// $qns=$row['qns'];
+// $qid=$row['qid'];
+// echo '<b>Question &nbsp;'.$sn.'&nbsp;::<br />'.$qns.'</b><br /><br />';
+// }
+// $q=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
+// echo '<form id ="quiz" action="update.php?q=quiz&step=2&eid='.$eid.'&n='.$sn.'&t='.$total.'&qid='.$qid.'" method="POST"  class="form-horizontal">
+// <br />';
+
+// while($row=mysqli_fetch_array($q) )
+// {
+// $option=$row['option'];
+// $optionid=$row['optionid'];
+// echo'<input type="radio" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
+// }
+// echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
+// // if($remainingSeconds==0)
+// // {
+// //   window.setInterval(function(){ 
+// //     document.getElementById("quiz").submit(); 
+// // }, 2000);
+// // }
+// $sn1=$sn;  
+// $sn2=$sn;
+// if($sn2+1>$total)
+// {
+//   $sn2=$sn2;
+// }
+// else
+// {
+//   $sn2+=1;
+// }
+// if($sn1-1==0)
+// {
+//   $sn1=1;
+// }
+// else
+// {
+//   $sn1-=1;
+// }
+
+
+// echo '<br/><tr><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo;</a></button></td></tr>';
+
+
+// if($remainingSeconds==0)
+// {
+//   window.setInterval(function(){ 
+//     document.getElementById("quiz").submit(); 
+// }, 2000);
+// }
+// $sn1=$sn;  
+// $sn2=$sn;
+// if($sn2+1>$total)
+// {
+//   $sn2=$sn2;
+// }
+// else
+// {
+//   $sn2+=1;
+// }
+// if($sn1-1==0)
+// {
+//   $sn1=1;
+// }
+// else
+// {
+//   $sn1-=1;
+// }
+
+
+// echo '<br/><tr><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo;</a></button></td></tr>';
 //header("location:dash.php?q=4&step=2&eid=$id&n=$total");
-}
+}?>
+<!--quiz end-->
+
+<?php
 //result display
 if(@$_GET['q']== 'result' && @$_GET['eid']) 
 {
@@ -245,7 +364,7 @@ echo '</table></div>';
 
 }
 ?>
-<!--quiz end-->
+
 <?php
 //history start
 if(@$_GET['q']== 2) 
@@ -253,7 +372,7 @@ if(@$_GET['q']== 2)
 $q=mysqli_query($con,"SELECT * FROM history WHERE email='$email' ORDER BY date DESC " )or die('Error197');
 echo  '<div class="panel">
 <table class="table table-striped title1" >
-<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Marks for Correct answer</b></td><td><b>Marks for Wrong answer<b></td><td><b>Score</b></td>';
+<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Correct answers</b></td><td><b>Wrong answers<b></td><td><b>Score</b></td>';
 $c=0;
 while($row=mysqli_fetch_array($q) )
 {
@@ -298,21 +417,22 @@ echo '<tr><td style="color:black">'.$c.'</td><td>'.$name.'</td><td>'.$eid.'</td>
 echo '</table></div>';}
 ?>
 
+<!-- feedback table -->
 <?php if(@$_GET['q']==4) {
-$result = mysqli_query($con,"SELECT * FROM `feedback` ORDER BY `feedback`.`date` DESC") or die('Error');
+$result = mysqli_query($con,"SELECT * FROM `feedback`") or die('Error');
 echo '<div class="panel"><table class="table table-striped title1">
-<tr><td><b>id</b></td><td><b>Subject</b></td><td><b>Email</b></td><td><b>Date</b></td><td><b>Time</b></td><td><b>By</b></td><td></td><td></td></tr>';
+<tr><td><b>id</b></td><td><b>Subject</b></td><td><b>Email</b></td></tr>';
 $c=1;
 while($row = mysqli_fetch_array($result)) {
-	$date = $row['date'];
-	$date= date("d-m-Y",strtotime($date));
-	$time = $row['time'];
+	// $date = $row['date'];
+	// $date= date("d-m-Y",strtotime($date));
+	//$time = $row['time'];
 	$subject = $row['subject'];
-	$name = $row['name'];
+	//$name = $row['name'];
 	$email = $row['email'];
 	$id = $row['id'];
 	 echo '<tr><td>'.$c++.'</td>';
-	echo '<td><a title="Click to open feedback" href="account.php?q=4&fid='.$id.'">'.$subject.'</a></td><td>'.$email.'</td><td>'.$date.'</td><td>'.$time.'</td><td>'.$name.'</td>';
+	echo '<td><a title="Click to open feedback" href="account.php?q=4&fid='.$id.'">'.$subject.'</a></td><td>'.$email.'</td>';
 	echo '<td><a title="Delete Feedback" href="update.php?fdid='.$id.'"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td>
 	</tr>';
 }
@@ -334,13 +454,7 @@ echo '</table></div>';
 <span class="title1" style="margin-left:40%;font-size:30px;"><b>Enter Feedback Details</b></span><br /><br />
  <div class="col-md-3"></div><div class="col-md-6">   <form class="form-horizontal title1" name="form" action="update.php?q=addfeedback"  method="POST">
 <fieldset>
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-12 control-label" for="name"></label>  
-  <div class="col-md-12">
-  <input id="name" name="name" placeholder="Enter Name" class="form-control input-md" type="text">
-  </div>
-</div>
+
 
 <!-- Text input-->
 <div class="form-group">
@@ -366,20 +480,7 @@ echo '</table></div>';
   <input id="feedback" name="feedback" placeholder="Enter feedback" class="form-control input-md" type="text"> 
   </div>
 </div>
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-12 control-label" for="date"></label>  
-  <div class="col-md-12">
-  <input id="date" name="date" placeholder="Enter date" class="form-control input-md" type="text"> 
-  </div>
-</div>
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-12 control-label" for="feedback"></label>  
-  <div class="col-md-12">
-  <input id="time" name="time" placeholder="Enter time" class="form-control input-md" type="text"> 
-  </div>
-</div>
+
 <div class="form-group">
   <label class="col-md-12 control-label" for=""></label>
   <div class="col-md-12"> 
@@ -388,6 +489,27 @@ echo '</table></div>';
 </div>
 </fieldset>
 </form></div>';
+// <!-- Text input-->
+// <div class="form-group">
+//   <label class="col-md-12 control-label" for="name"></label>  
+//   <div class="col-md-12">
+//   <input id="name" name="name" placeholder="Enter Name" class="form-control input-md" type="text">
+//   </div>
+// </div>
+// <!-- Text input-->
+// <div class="form-group">
+//   <label class="col-md-12 control-label" for="date"></label>  
+//   <div class="col-md-12">
+//   <input id="date" name="date" placeholder="Enter date" class="form-control input-md" type="text"> 
+//   </div>
+// </div>
+// <!-- Text input-->
+// <div class="form-group">
+//   <label class="col-md-12 control-label" for="feedback"></label>  
+//   <div class="col-md-12">
+//   <input id="time" name="time" placeholder="Enter time" class="form-control input-md" type="text"> 
+//   </div>
+// </div>
 }?>
 <?php
 //history start
