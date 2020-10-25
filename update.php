@@ -31,16 +31,16 @@ header("location:dash.php?q=1");
 if(isset($_SESSION['key'])){
 if(@$_GET['q']== 'rmquiz' && $_SESSION['key']=='admin') {
 $eid=@$_GET['eid'];
-$result = mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' ") or die('Error');
+$result = mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' ") or die('Error1');
 while($row = mysqli_fetch_array($result)) {
-	$qid = $row['qid'];
-$r1 = mysqli_query($con,"DELETE FROM options WHERE qid='$qid'") or die('Error');
-$r2 = mysqli_query($con,"DELETE FROM answer WHERE qid='$qid' ") or die('Error');
+    $qid = $row['qid'];
+$r1 = mysqli_query($con,"DELETE FROM options WHERE qid='$qid'") or die('Error2');
+$r2 = mysqli_query($con,"DELETE FROM answer WHERE qid='$qid' ") or die('Error3');
 }
-$r3 = mysqli_query($con,"DELETE FROM questions WHERE eid='$eid' ") or die('Error');
-$r4 = mysqli_query($con,"DELETE FROM quiz WHERE eid='$eid' ") or die('Error');
-$r4 = mysqli_query($con,"DELETE FROM history WHERE eid='$eid' ") or die('Error');
-$r4 = mysqli_query($con,"DELETE FROM rank WHERE eid='$eid' ") or die('Error');
+$r3 = mysqli_query($con,"DELETE FROM questions WHERE eid='$eid' ") or die('Error4');
+$r4 = mysqli_query($con,"DELETE FROM quiz WHERE eid='$eid' ") or die('Error5');
+$r4 = mysqli_query($con,"DELETE FROM history WHERE eid='$eid' ") or die('Error6');
+$r4 = mysqli_query($con,"DELETE FROM rank WHERE eid='$eid' ") or die('Error7');
 header("location:dash.php?q=5");
 }
 }
@@ -85,7 +85,7 @@ $a=$_POST[$i.'1'];
 $b=$_POST[$i.'2'];
 $c=$_POST[$i.'3'];
 $d=$_POST[$i.'4'];
-$qa=mysqli_query($con,"INSERT INTO options VALUES  ('$qid','$a','$oaid')") or die('Error61');
+$qa=mysqli_query($con,"INSERT INTO options(qid,option,optionid) VALUES  ('$qid','$a','$oaid')") or die('Error61');
 $qb=mysqli_query($con,"INSERT INTO options VALUES  ('$qid','$b','$obid')") or die('Error62');
 $qc=mysqli_query($con,"INSERT INTO options VALUES  ('$qid','$c','$ocid')") or die('Error63');
 $qd=mysqli_query($con,"INSERT INTO options VALUES  ('$qid','$d','$odid')") or die('Error64');
@@ -124,7 +124,7 @@ $password = $_POST['password'];
 $password=md5($password);
 $password=md5($password);
 $mobile = $_POST['mobile'];
-$q3=mysqli_query($con,"INSERT INTO admin VALUES  ('$name','$uname','$email','$password','$mobile')");
+$q3=mysqli_query($con,"INSERT INTO admin (name,uname,email,password) values ('$name','$uname','$email','$password','$mobile')");
 
 header("location:dash.php?q=10");
 }
@@ -207,14 +207,14 @@ $q2=mysqli_query($con,"INSERT INTO rank VALUES('$eid','$email','$s',NOW())")or d
 }
 else
 {
-$q3=mysqli_query($con,"SELECT * FROM history where email='$email'");	
+$q3=mysqli_query($con,"SELECT * FROM history where email='$email'");    
 while($row=mysqli_fetch_array($q) )
 {
 $sun=$row['score'];
 }
 while($row=mysqli_fetch_array($q3))
 {
-	$eid=$row['eid'];
+    $eid=$row['eid'];
 }
 $sun=$sun;
 // UPDATE `rank` SET `eid`=$eid, `score`=$sun ,time=NOW() WHERE email= '$email'

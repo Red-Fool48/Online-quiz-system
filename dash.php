@@ -40,15 +40,15 @@ $(function () {
  include_once 'dbConnection.php';
 session_start();
 $email=$_SESSION['email'];
+$uname=$_SESSION['uname'];
   if(!(isset($_SESSION['email']))){
 header("location:index.php");
-
 }
 else
 {
 $name = $_SESSION['name'];
 include_once 'dbConnection.php';
-echo '<span class="pull-right top title1" ><span class="log1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Hello,</span> <a href="dash.php" class="log log1">'.$name.'</a>&nbsp;|&nbsp;<a href="logout.php?q=account.php" class="log"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Signout</button></a></span>';
+echo '<span class="pull-right top title1" ><span class="log1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Hello,</span> <a href="dash.php" class="log log1">'.$uname.'</a>&nbsp;|&nbsp;<a href="logout.php?q=account.php" class="log"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Signout</button></a></span>';
 }?>
 
 </div></div>
@@ -85,11 +85,31 @@ echo '<span class="pull-right top title1" ><span class="log1"><span class="glyph
           <ul class="dropdown-menu">
             <li><a href="dash.php?q=6">Add Notice</a></li>
             <li><a href="dash.php?q=11">View Notice(s)</a></li></ul>
-          <li class="dropdown <?php if(@$_GET['q']==10 || @$_GET['q']==13) echo'active"'; ?>">
+          <?php 
+          if($uname=='admin01') 
+          {
+            echo '
+          <li class="dropdown ">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin(s)<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="dash.php?q=10">Add Admin(s)</a></li>
-            <li><a href="dash.php?q=13">View Admin(s)</a></li></ul>
+          <li><a href="dash.php?q=10">Add Admin(s)</a></li>
+            <li><a href="dash.php?q=13">View Admin(s)</a></li></ul>';
+          }
+
+          //   if(@$_GET['q']==10 || @$_GET['q']==13)
+          //   {
+          //   echo'<li><a href="dash.php?q=10">Add Admin(s)</a></li>
+          //   <li><a href="dash.php?q=13">View Admin(s)</a></li></ul>';}
+          // }
+          else
+            {
+               echo '
+          <li class="dropdown ">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin(s)<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="dash.php?q=13">View Admin(s)</a></li></ul>';           
+            }
+            ?>
           <!-- <li <?php if(@$_GET['q']==10) echo'class="active"'; ?>><a href="dash.php?q=10">Add Admin</a></li> -->
         </li>
       </ul>
@@ -175,7 +195,7 @@ else
 {
   $sn1-=1;
 }
-echo '<br/><button type="submit class="btn"><a href="http://localhost/online-quiz-master/dash.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn"><a href="http://localhost/online-quiz-master/dash.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo</a></button>';
+echo '<br/><button type="submit class="btn"><a href="http://localhost/online-quiz-master%20-%20Copy/dash.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn"><a href="http://localhost/online-quiz-master%20-%20Copy/dash.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo</a></button>';
 //header("location:dash.php?q=4&step=2&eid=$id&n=$total");
 }
 ?>
@@ -186,7 +206,7 @@ if(@$_GET['q']== 2)
 $q=mysqli_query($con,"SELECT * FROM rank  ORDER BY score DESC " )or die('Error223');
 echo  '<div class="panel title">
 <table class="table table-striped title1" >
-<tr style="color:red"><td><b>Rank</b></td><td><b>Name</b></td><td><b>e-mail</b></td><td><b>Score</b></td></tr>';
+<tr style="color:black"><td><b>Rank</b></td><td><b>Name</b></td><td><b>e-mail</b></td><td><b>Score</b></td></tr>';
 $c=0;
 while($row=mysqli_fetch_array($q) )
 {
@@ -209,7 +229,7 @@ echo '</table></div>';}
 <!--users start-->
 <?php if(@$_GET['q']==1) {
 
-$result = mysqli_query($con,"SELECT * FROM user") or die('Error');
+$result = mysqli_query($con,"SELECT * FROM user inner join user_mobile on user.email=user_mobile.email ") or die('Error');
 echo  '<div class="panel"><table class="table table-striped title1">
 <tr><td><b>S.N.</b></td><td><b>Name</b></td><td><b>Gender</b></td><td><b>Email</b></td><td><b>Mobile</b></td><td></td></tr>';
 $c=1;
@@ -478,9 +498,9 @@ echo '</table></div>';
 }
 ?>
 
-
+<!-- add admin -->
 <?php
-if(@$_GET['q']==10 ) {
+if(@$_GET['q']==10 && $uname=='admin01') {
 echo ' 
 <div class="row">
 <span class="title1" style="margin-left:40%;font-size:30px;"><b>Enter New Admin Details</b></span><br /><br />
@@ -540,6 +560,10 @@ echo '
 </fieldset>
 </form></div>';
 }
+elseif($uname!='admin01')
+{
+  echo'<script>alert You do not have the access</script>';
+}
 ?>
 <!-- notice insertion -->
 <?php
@@ -585,10 +609,12 @@ $c=0;
 while($row=mysqli_fetch_array($q) )
 {
 $notice=$row['notice'];
+$id=$row['id'];
 $uname=$row['uname'];
 $c++;
-echo '<tr><td>'.$notice.'</td><td>'.$uname.'</td></tr>';
+echo '<tr><td>'.$notice.'</td><td>'.$uname.'</td><td><a title="Delete Notice" href="update.php?id='.$id.'"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td></tr>';
 }
+// echo '<td><a title="Delete Notice" href="update.php?q=delnotice"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td></tr>';
 echo'</table></div>';
 }?>
 <!-- view all admins -->

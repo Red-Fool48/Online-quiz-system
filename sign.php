@@ -6,7 +6,7 @@ $name = $_POST['name'];
 $name= ucwords(strtolower($name));
 $gender = $_POST['gender'];
 $email = $_POST['email'];
-$regno = $_POST['regno'];
+//$regno = $_POST['regno'];
 $mob = $_POST['mob'];
 $password = $_POST['password'];
 $name = stripslashes($name);
@@ -38,8 +38,25 @@ $password = addslashes($password);
 // $headers = 'From:vquiz.dmin.com'; // Set from headers
 $temp=mail($to, $subject, $message, $headers); 
 $password=md5($password);
-echo $temp;
-$q3=mysqli_query($con,"INSERT INTO user VALUES  ('$name' , '$gender' ,'$email','$mob', '$password')");
+// echo $temp;
+// $q3=mysqli_query($con,"INSERT INTO user VALUES  ('$name' , '$gender' ,'$email', '$password')");
+$q3=$con->prepare("INSERT INTO user(name,gender,email,password) VALUES (?,?,?,?)");
+//INSERT INTO user(name,gender,email,password) VALUES ('$name' , '$gender' ,'$email', '$password')
+$q3->bind_param("ssss",$name,$gender,$email,$password);
+if($q3->execute())
+{
+	$usuccess=1;
+}
+else
+{
+	$usuccess='Error!!';
+}
+// if($stmt->execute())
+// {
+// 	header("location:index.php");
+// 	echo'Success';
+// }
+$q4=mysqli_query($con,"INSERT INTO user_mobile VALUES ('$email','$mob')");
 if($q3)
 {
 session_start();

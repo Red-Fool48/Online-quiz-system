@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION["email"])){
-session_destroy();
+header('location: account.php?q=1');
 }
 include_once 'dbConnection.php';
 $ref=@$_GET['q'];
@@ -25,5 +25,32 @@ $_SESSION["email"] = $email;
 header("location:account.php?q=1");
 }
 else
-header("location:$ref?w=Wrong Username or Password");
+{header("location:$ref?w=Wrong Username or Password");}
+echo'<script type = "text/javascript">
+    function changeHashOnLoad() {
+        window.location.href += "#";
+        setTimeout("changeHashAgain()", "50");
+    }
+
+    function changeHashAgain() 
+    {          
+        window.location.href += "1";
+    }
+
+    var storedHash = window.location.hash;
+    window.setInterval(function () {
+        if (window.location.hash != storedHash) {
+            window.location.hash = storedHash;
+        }
+    }, 50);
+
+    </script>';
+    if(isset($_SESSION['email'])) {
+     header("Location: account.php?q=1"); // redirects them to homepage
+     exit; // for good measure
+}
+if(isset($_SESSION['uname']))
+{
+	header("Location: dash.php?q=0");
+}
 ?>

@@ -202,12 +202,7 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
 </div><!--container end-->
 
 <!--Footer start-->
-<div class="row footer">
- <div class="col-md-6 box">
-<a href="" target="_blank">About us</a>
-</div>
-<div class="col-md-6 box">
-<a href="#" data-toggle="modal" data-target="#login">Admin Login</a></div>
+
 
 <!-- Modal For Developers-->
 
@@ -226,7 +221,7 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
 <div class="col-md-6">
 <form role="form" method="post" action="admin.php?q=index.php">
 <div class="form-group">
-<input type="text" name="uname" maxlength="20"  placeholder="Admin user id" class="form-control"/> 
+<input type="text" name="aemail" maxlength="20"  placeholder="Admin email" class="form-control"/> 
 </div>
 <div class="form-group">
 <input type="password" name="password" maxlength="15" placeholder="Password" class="form-control"/>
@@ -243,8 +238,13 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="row footer">
+ <div class="col-md-6 box">
+<a href="" target="_blank">About us</a>
+</div>
+<div class="col-md-6 box">
+<a href="#" data-toggle="modal" data-target="#login">Admin Login</a></div>
+</div>
 <!--footer end-->
-
-
 </body>
 </html>

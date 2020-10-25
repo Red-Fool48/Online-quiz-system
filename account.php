@@ -32,6 +32,25 @@
   <script src="js/bootstrap.min.js"  type="text/javascript"></script>
 <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
  <!--alert message-->
+<script type = "text/javascript">
+    function changeHashOnLoad() {
+        window.location.href += "#";
+        setTimeout("changeHashAgain()", "50");
+    }
+
+    function changeHashAgain() 
+    {          
+        window.location.href += "1";
+    }
+
+    var storedHash = window.location.hash;
+    window.setInterval(function () {
+        if (window.location.hash != storedHash) {
+            window.location.hash = storedHash;
+        }
+    }, 50);
+
+    </script>
 <?php if(@$_GET['w'])
 {echo'<script>alert("'.@$_GET['w'].'");</script>';}
 ?>
@@ -41,6 +60,7 @@
 <?php
 include_once 'dbConnection.php';
 ?>
+
 <body>
 <div class="header">
 <div class="row">
@@ -50,9 +70,16 @@ include_once 'dbConnection.php';
  <?php
  include_once 'dbConnection.php';
 session_start();
+if($usuccess==1)
+{
+  echo $usuccess;
+}
+else
+{
+  echo '....';
+}
   if(!(isset($_SESSION['email']))){
 header("location:index.php");
-
 }
 else
 {
@@ -62,7 +89,9 @@ $_SESSION["key"] ='account';
 
 include_once 'dbConnection.php';
 echo '<span class="pull-right top title1" ><span class="log1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Hello,</span> <a href="account.php?q=1" class="log log1">'.$name.'</a>&nbsp;|&nbsp;<a href="logout.php?q=account.php" class="log"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Signout</button></a></span>';
-}?>
+}
+
+?>
 </div>
 </div></div>
 <div class="bg">
@@ -113,7 +142,35 @@ echo '<span class="pull-right top title1" ><span class="log1"><span class="glyph
 <input id="search" type="text" id ="search" name="search" placeholder="Type here"/>
 <input id="submit" type="submit" value="Search"/>
 </form> -->
+<script type="text/javascript"> 
+        function preventBack() { 
+            window.history.forward();  
+        } 
+          
+        setTimeout("preventBack()", 0); 
+          
+        window.onunload = function () { null }; 
+    </script>
 <?php if(@$_GET['q']==1) {
+    echo'<script type = "text/javascript">
+    function changeHashOnLoad() {
+        window.location.href += "#";
+        setTimeout("changeHashAgain()", "50");
+    }
+
+    function changeHashAgain() 
+    {          
+        window.location.href += "1";
+    }
+
+    var storedHash = window.location.hash;
+    window.setInterval(function () {
+        if (window.location.hash != storedHash) {
+            window.location.hash = storedHash;
+        }
+    }, 50);
+
+    </script>';
 echo '
 <div class="search"></div>
 <form name="search" action ="account.php?q=1" method="post"> 
@@ -131,6 +188,7 @@ if(isset($search))
   echo $search;
 }
 //$search = $_GET['search'];
+$search=mysqli_escape_string($con,$search);
 $result = mysqli_query($con,"SELECT * FROM quiz where tag like '%$search%'");
 
 $c=1;
@@ -191,46 +249,86 @@ echo '</table></div>';
 // <!--quiz start-->
 ?>
 <?php
+
 if(@$_GET['q']== 'quiz' && @$_GET['step']== 2) {
+  echo'<script type = "text/javascript">
+    function changeHashOnLoad() {
+        window.location.href += "#";
+        setTimeout("changeHashAgain()", "50");
+    }
+
+    function changeHashAgain() 
+    {          
+        window.location.href += "1";
+    }
+
+    var storedHash = window.location.hash;
+    window.setInterval(function () {
+        if (window.location.hash != storedHash) {
+            window.location.hash = storedHash;
+        }
+    }, 50);
+
+    </script>';
 $eid=@$_GET['eid'];
 $sn=@$_GET['n'];
 $total=@$_GET['t'];
 $q2=mysqli_query($con,"SELECT * from quiz where eid='$eid'");
-while($row=mysqli_fetch_array($q2))
-{
-$timer=$row['time'];
-}
-if(!isset($_SESSION['time_started'])){
-    //Set the current timestamp.
-    $_SESSION['time_started'] = time();
-    $_SESSION['countdown'] = $timer*60;
-}
-$now=time();
-$_SESSION['timer']=$timer;
-$_SESSION['start_time']=date('Y-m-d H:i:s');
-$end_time=date('Y-m-d H:i:s',strtotime('+'.$_SESSION['timer'].'minutes'));
-$_SESSION['end_time']=$end_time;
-//header('location:temp.php');
+// while($row=mysqli_fetch_array($q2))
+// {
+// $timer=$row['time'];
+// }
+// if(!isset($_SESSION['time_started'])){
+//     //Set the current timestamp.
+//     $_SESSION['time_started'] = time();
+//     $_SESSION['countdown'] = $timer*60;
+// }
+// $now=time();
+//$_SESSION['timer']=$timer;
+// $_SESSION['start_time']=date('Y-m-d H:i:s');
+// $end_time=date('Y-m-d H:i:s',strtotime('+'.$_SESSION['timer'].'minutes'));
+// $_SESSION['end_time']=$end_time;
+// //header('location:temp.php');
 // $from_time=date('Y-m-d H:i:s');
 // $to_time=$_SESSION["end_time"];
 // $timefirst=strtotime($from_time);
 // $timesecond=strtotime($to_time);
 // $difference=$timesecond-$timefirst;
 // echo gmdate("i:s",$difference);
-$timeSince = $now - $_SESSION['time_started']; 
-$remainingSeconds = ($_SESSION['countdown'] - $timeSince);
-//header("location:temp.php");
-// echo $remainingSeconds;
-if($remainingSeconds==0)
-{
-  echo '<script>alert("OVER!!!");</script>';
-  $remainingSeconds=0;
-}
+// $timeSince = $now - $_SESSION['time_started']; 
+// $remainingSeconds = ($_SESSION['countdown'] - $timeSince);
+// //header("location:temp.php");
+// // echo $remainingSeconds;
+// if($remainingSeconds==0)
+// {
+//   echo '<script>alert("OVER!!!");</script>';
+//   $remainingSeconds=0;
+// }
 
 // AND sn='$sn'
 
 
-$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid'  " );
+// $q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid'  " );
+// echo '<div class="panel" style="margin:5%">';
+
+// while($row=mysqli_fetch_array($q))
+// {
+// $qns=$row['qns'];
+// $qid=$row['qid'];
+// echo '<b>Question &nbsp;'.$sn.'&nbsp;::<br />'.$qns.'</b><br /><br />';
+// $q1=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
+// echo '<form id ="quiz" action="update.php?q=quiz&step=2&eid='.$eid.'&n='.$sn.'&t='.$total.'&qid='.$qid.'" method="POST"  class="form-horizontal">
+// <br />';
+// while($row=mysqli_fetch_array($q1) )
+// {
+// $option=$row['option'];
+// $optionid=$row['optionid'];
+// echo'<input type="checkbox" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
+// }
+// $sn+=1;
+// }
+// echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
+$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' AND sn='$sn' " );
 echo '<div class="panel" style="margin:5%">';
 
 while($row=mysqli_fetch_array($q))
@@ -238,69 +336,53 @@ while($row=mysqli_fetch_array($q))
 $qns=$row['qns'];
 $qid=$row['qid'];
 echo '<b>Question &nbsp;'.$sn.'&nbsp;::<br />'.$qns.'</b><br /><br />';
-$q1=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
+}
+$q=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
 echo '<form id ="quiz" action="update.php?q=quiz&step=2&eid='.$eid.'&n='.$sn.'&t='.$total.'&qid='.$qid.'" method="POST"  class="form-horizontal">
 <br />';
-while($row=mysqli_fetch_array($q1) )
+
+while($row=mysqli_fetch_array($q) )
 {
 $option=$row['option'];
 $optionid=$row['optionid'];
-echo'<input type="checkbox" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
+echo'<input type="radio" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
 }
-$sn+=1;
-}
+
 echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
-$q=mysqli_query($con,"SELECT * FROM questions WHERE eid='$eid' AND sn='$sn' " );
-echo '<div class="panel" style="margin:5%">';
-
-// if($_SESSION["type"]==1)
+echo'<script language="javascript" type="text/javascript">
+window.history.forward(1);
+  setTimeout("disableBackButton()", 0);
+    $(document).ready(function () {
+       disableBackButton();
+    });
+</script>';
+// if($remainingSeconds==0)
 // {
-
+//   window.setInterval(function(){ 
+//     document.getElementById("quiz").submit(); 
+// }, 2000);
 // }
-// while($row=mysqli_fetch_array($q))
-// {
-// $qns=$row['qns'];
-// $qid=$row['qid'];
-// echo '<b>Question &nbsp;'.$sn.'&nbsp;::<br />'.$qns.'</b><br /><br />';
-// }
-// $q=mysqli_query($con,"SELECT * FROM options WHERE qid='$qid' " );
-// echo '<form id ="quiz" action="update.php?q=quiz&step=2&eid='.$eid.'&n='.$sn.'&t='.$total.'&qid='.$qid.'" method="POST"  class="form-horizontal">
-// <br />';
-
-// while($row=mysqli_fetch_array($q) )
-// {
-// $option=$row['option'];
-// $optionid=$row['optionid'];
-// echo'<input type="radio" name="ans" value="'.$optionid.'">'.$option.'<br /><br />';
-// }
-// echo'<br/><button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;Submit</button></form></div>';
-// // if($remainingSeconds==0)
-// // {
-// //   window.setInterval(function(){ 
-// //     document.getElementById("quiz").submit(); 
-// // }, 2000);
-// // }
-// $sn1=$sn;  
-// $sn2=$sn;
-// if($sn2+1>$total)
-// {
-//   $sn2=$sn2;
-// }
-// else
-// {
-//   $sn2+=1;
-// }
-// if($sn1-1==0)
-// {
-//   $sn1=1;
-// }
-// else
-// {
-//   $sn1-=1;
-// }
+$sn1=$sn;  
+$sn2=$sn;
+if($sn2+1>$total)
+{
+  $sn2=$sn2;
+}
+else
+{
+  $sn2+=1;
+}
+if($sn1-1==0)
+{
+  $sn1=1;
+}
+else
+{
+  $sn1-=1;
+}
 
 
-// echo '<br/><tr><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo;</a></button></td></tr>';
+// echo '<br/><tr><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master%20-%20Copy/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn1.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page">&laquo; Go back</a></button><br/></td><td><button type="submit class="btn btn-primary"><a href="http://localhost/online-quiz-master%20-%20Copy/account.php?q=quiz&step=2&eid='.$eid.'&n='.$sn2.'&t='.$total.'&qid='.$qid.'"" title="Return to previous page"> Next question &raquo;</a></button></td></tr>';
 
 
 // if($remainingSeconds==0)
@@ -339,7 +421,7 @@ echo '<div class="panel" style="margin:5%">';
 if(@$_GET['q']== 'result' && @$_GET['eid']) 
 {
 $eid=@$_GET['eid'];
-$q=mysqli_query($con,"SELECT * FROM history WHERE eid='$eid' AND email='$email' " )or die('Error157');
+$q=mysqli_query($con,"SELECT * FROM history WHERE eid='$eid' AND email='$email' order by level limit 1" )or die('Error157');
 echo  '<div class="panel">
 <center><h1 class="title" style="color:black">Result</h1><center><br/><table class="table table-striped title1" style="font-size:20px;font-weight:1000;">';
 
@@ -354,7 +436,7 @@ echo '<tr style="color:grey"><td>Total Questions</td><td>'.$qa.'</td></tr>
 	  <tr style="color:grey"><td>Wrong Answer&nbsp;<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></td><td>'.$w.'</td></tr>
 	  <tr style="color:grey"><td>Score&nbsp;<span class="glyphicon glyphicon-star" aria-hidden="true"></span></td><td>'.$s.'</td></tr>';
 }
-$q=mysqli_query($con,"SELECT * FROM rank WHERE  email='$email' " )or die('Error157');
+$q=mysqli_query($con,"SELECT * FROM rank WHERE  email='$email' and eid= '$eid' " )or die('Error157');
 while($row=mysqli_fetch_array($q) )
 {
 $s=$row['score'];
@@ -372,7 +454,7 @@ if(@$_GET['q']== 2)
 $q=mysqli_query($con,"SELECT * FROM history WHERE email='$email' ORDER BY date DESC " )or die('Error197');
 echo  '<div class="panel">
 <table class="table table-striped title1" >
-<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Correct answers</b></td><td><b>Wrong answers<b></td><td><b>Score</b></td>';
+<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Mark for correct answers</b></td><td><b>Mark for wrong answers<b></td><td><b>Score</b></td>';
 $c=0;
 while($row=mysqli_fetch_array($q) )
 {
@@ -393,9 +475,9 @@ echo'</table></div>';
 }
 
 //ranking start
-if(@$_GET['q']== 3) 
+if(@$_GET['q']==3) 
 {
-$q=mysqli_query($con,"SELECT * FROM rank  GROUP BY eid ORDER BY score DESC " )or die('Error223');
+$q=mysqli_query($con,"SELECT * FROM rank  GROUP BY eid ORDER BY  time,score " )or die('Error223');
 echo  '<div class="panel title">
 <table class="table table-striped title1" >
 <tr style="color:black"><td><b>Rank</b></td><td><b>Name</b></td><td><b>Quiz id</b></td><td><b>email</b></td><td><b>Score</b></td></tr>';
@@ -512,7 +594,7 @@ echo '</table></div>';
 // </div>
 }?>
 <?php
-//history start
+//notice start
 if(@$_GET['q']== 11) 
 {
 $q=mysqli_query($con,"SELECT * FROM notice" )or die('Error201');
