@@ -1,11 +1,19 @@
+html
+{
+	height: 100%;
+}
 body
 {
 overflow-x:hidden;
 width:100%;
 font: 15px "Century Gothic", "Times Roman", sans-serif;
+height:100%;
 background:#eee;
-min-height:550px;
-background-attachment:fixed;
+background:url(../image/bg1.jpg);
+background-size: 100%;
+/*background:url(../image/bg.jpg);*/
+min-height:580px;
+/*background-attachment:fixed;*/
 }
 .bg
 {
@@ -14,7 +22,9 @@ min-height:540px;
 .bg1
 {
 background:url(../image/bg.jpg);
-min-height:535px;
+/*min-height:535px;*/
+background-size: 100%;
+height:87%;
 }
 
 @font-face {
@@ -97,6 +107,7 @@ text-align:center;
 border-top:1px solid;
 border-color:#323232;
 background-color:#202020;
+padding:10px;
 }
 .footer a
 {
@@ -112,9 +123,32 @@ text-decoration:none;
 color:#9acd32;
 border-top:2px solid;
 border-color:orange;
-
 }
 
+.li
+{
+font-size:15px;
+text-align:center;
+border-top:1px solid;
+border-color:#323232;
+background-color:#202020;
+padding:10px;
+}
+.li a
+{
+margin:25px;
+color:orange;
+text-decoration:none;
+font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+.li a:hover
+{
+text-decoration:none;
+color:#9acd32;
+border-top:2px solid;
+border-color:orange;
+}
 .box
 {
 padding:9px;
