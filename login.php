@@ -31,12 +31,10 @@ echo'<script type = "text/javascript">
         window.location.href += "#";
         setTimeout("changeHashAgain()", "50");
     }
-
     function changeHashAgain() 
     {          
         window.location.href += "1";
     }
-
     var storedHash = window.location.hash;
     window.setInterval(function () {
         if (window.location.hash != storedHash) {
@@ -48,9 +46,5 @@ echo'<script type = "text/javascript">
     if(isset($_SESSION['email'])) {
      header("Location: account.php?q=1"); // redirects them to homepage
      exit; // for good measure
-}
-if(isset($_SESSION['uname']))
-{
-	header("Location: dash.php?q=0");
 }
 ?>

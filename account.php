@@ -189,16 +189,16 @@ if(isset($search))
 }
 //$search = $_GET['search'];
 $search=mysqli_escape_string($con,$search);
-$result = mysqli_query($con,"SELECT * FROM quiz where tag like '%$search%'");
+$result = mysqli_query($con,"SELECT * FROM quiz where tag like '%$search%' or eid='$search'");
 
 $c=1;
 if(mysqli_num_rows($result)==0)
 {
   error_reporting(0);
-  echo '<div class="panel"><table class="table table-striped title1">"No quizzes!!"</table></div>';
+  echo '<div class="panel"><table class="table table-striped title1">No quiz of that tag or quiz id exists!!</table></div>';
 }
 
-elseif($result)
+elseif($result && $search!='')
 {
   echo  '<div class="panel"><table class="table table-striped title1">
 <tr><td><b>S.N.</b></td><td><b>Topic</b></td><td><b>Total question</b></td><td><b>Marks</b></td><td><b>Time limit</b></td><td></td></tr>';
@@ -209,8 +209,6 @@ while($row = mysqli_fetch_array($result)) {
   $time = $row['time'];
 	$eid = $row['eid'];
 }
-
-$search="";
 $q12=mysqli_query($con,"SELECT score FROM history WHERE eid='$eid' AND email='$email'" )or die('Error98');
 $rowcount=mysqli_num_rows($q12);	
 if($rowcount == 0){
@@ -222,6 +220,10 @@ else
 echo '<tr style="color:black"><td>'.$c++.'</td><td>'.$title.'&nbsp;<span title="This quiz is already solved by you" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td><td>'.$total.'</td><td>'.$sahi*$total.'</td><td>'.$time.'&nbsp;min</td>
 	<td><b><a href="" class="pull-right btn sub1" style="margin:0px;background:grey"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;<span class="title1"><b>Done</b></span></a></b></td></tr>';
 }
+}
+else
+{
+  echo '<div class="panel"><table class="table table-striped title1">Please enter a tag</table></div>';
 }
 
 $c=0;
@@ -454,7 +456,7 @@ if(@$_GET['q']== 2)
 $q=mysqli_query($con,"SELECT * FROM history WHERE email='$email' ORDER BY date DESC " )or die('Error197');
 echo  '<div class="panel">
 <table class="table table-striped title1" >
-<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Mark for correct answers</b></td><td><b>Mark for wrong answers<b></td><td><b>Score</b></td>';
+<tr style="color:black"><td><b>S.N.</b></td><td><b>Quiz</b></td><td><b>Question Solved</b></td><td><b>Quiz id</b></td><td><b>Correct answers</b></td><td><b>Wrong answers<b></td><td><b>Score</b></td>';
 $c=0;
 while($row=mysqli_fetch_array($q) )
 {
@@ -477,7 +479,43 @@ echo'</table></div>';
 //ranking start
 if(@$_GET['q']==3) 
 {
-$q=mysqli_query($con,"SELECT * FROM rank  GROUP BY eid ORDER BY  time,score " )or die('Error223');
+  echo '
+<div class="search"></div>
+<form name="search" action ="account.php?q=3" method="post"> 
+<input id="search" type="text" size="100" id ="search" name="search" placeholder="Enter the quiz id from history"/>
+<input id="submit" type="submit" value="search"/>
+</form>
+ ';
+  $search="";
+if(isset($_POST['search']))
+{
+  $search=$_POST['search'];
+}
+if(isset($search))
+{
+  echo $search;
+}
+//$search = $_GET['search'];
+$search=mysqli_escape_string($con,$search);
+$result = mysqli_query($con,"SELECT * FROM rank where eid ='$search'");
+$c=1;
+
+if(mysqli_num_rows($result)==0 && $search!='')
+{
+  error_reporting(0);
+  echo '<div class="panel"><table class="table table-striped title1">No quiz of that quiz id!!</table></div>';
+}
+
+elseif($result && $search!='')
+{
+//   echo  '<div class="panel"><table class="table table-striped title1">
+// <tr><td><b>S.N.</b></td><td><b>Topic</b></td><td><b>Total question</b></td><td><b>Marks</b></td><td><b>Time limit</b></td><td></td></tr>';
+while($row = mysqli_fetch_array($result)) {
+  $e=$row['email'];
+$s=$row['score'];
+$eid=$row['eid'];
+}
+$q=mysqli_query($con,"SELECT * FROM rank where eid='$eid' ORDER BY score desc " )or die('Error223');
 echo  '<div class="panel title">
 <table class="table table-striped title1" >
 <tr style="color:black"><td><b>Rank</b></td><td><b>Name</b></td><td><b>Quiz id</b></td><td><b>email</b></td><td><b>Score</b></td></tr>';
@@ -496,31 +534,65 @@ $name=$row['name'];
 $c++;
 echo '<tr><td style="color:black">'.$c.'</td><td>'.$name.'</td><td>'.$eid.'</td><td>'.$e.'</td><td>'.$s.'</td><td>';
 }
+}
+
+else
+{
+  echo' <div class="panel"><table class="table table-striped title1">"Enter the quiz id in the search bar!"</table></div>';
+}
 echo '</table></div>';}
 ?>
 
 <!-- feedback table -->
 <?php if(@$_GET['q']==4) {
-$result = mysqli_query($con,"SELECT * FROM `feedback`") or die('Error');
-echo '<div class="panel"><table class="table table-striped title1">
-<tr><td><b>id</b></td><td><b>Subject</b></td><td><b>Email</b></td></tr>';
+  $temp=$_SESSION['email'];
+$result = mysqli_query($con,"SELECT * FROM `feedback` where email='$temp'") or die('Error');
+if(mysqli_num_rows($result)==0)
+{
+  echo '<div class="panel">Please add a feedback first!!</div>';
+
+}
+
+else
+{echo '<div class="panel"><table class="table table-striped title1">
+<tr><td><b>id</b></td><td><b>Subject</b></td><td><b>Feedback</b></td></tr>';
 $c=1;
+
 while($row = mysqli_fetch_array($result)) {
 	// $date = $row['date'];
 	// $date= date("d-m-Y",strtotime($date));
 	//$time = $row['time'];
 	$subject = $row['subject'];
 	//$name = $row['name'];
-	$email = $row['email'];
+	// $email = $row['email'];
+  $feedback=$row['feedback'];
 	$id = $row['id'];
 	 echo '<tr><td>'.$c++.'</td>';
-	echo '<td><a title="Click to open feedback" href="account.php?q=4&fid='.$id.'">'.$subject.'</a></td><td>'.$email.'</td>';
+  echo '<td><a title="Click to open feedback" href="account.php?q=4&fid='.$id.'">'.$subject.'</a></td><td>'.$feedback.'</td>
+  <td><a title="Open Feedback" href=account.php?q=4&fid='.$id.'"><b><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></b></a></td>';
 	echo '<td><a title="Delete Feedback" href="update.php?fdid='.$id.'"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td>
 	</tr>';
 }
 echo '</table></div>';
 }
+}
 ?>
+<?php if(@$_GET['fid']) {
+echo '<br />';
+$id=@$_GET['fid'];
+$result = mysqli_query($con,"SELECT * FROM feedback WHERE id='$id' ") or die('Error');
+while($row = mysqli_fetch_array($result)) {
+  $name = $row['email'];
+  $subject = $row['subject'];
+  // $date = $row['date'];
+  // $date= date("d-m-Y",strtotime($date));
+  // $time = $row['time'];
+  $feedback = $row['feedback'];
+  
+echo '<div class="panel"<a title="Back to Archive" href="update.php?q1=2"><b><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span></b></a><h2 style="text-align:center; margin-top:-15px;font-family: "Ubuntu", sans-serif;"><b>'.$subject.'</b></h1>';
+ echo '<div class="mCustomScrollbar" data-mcs-theme="dark" style="margin-left:10px;margin-right:10px; max-height:450px; line-height:35px;padding:5px;">
+<span style="line-height:35px;padding:5px;">&nbsp;<b>By:</b>&nbsp;'.$name.'</span><br />'.$feedback.'</div></div>';}
+}?>
 <?php if(@$_GET['q']==15)
 {
 	// <!-- Text input-->
@@ -531,6 +603,15 @@ echo '</table></div>';
 	//   </div>
 	// </div>
 
+// <!-- Text input-->
+// <div class="form-group">
+//   <label class="col-md-12 control-label" for="email"></label>  
+//   <div class="col-md-12">
+//   <input id="email" name="email" placeholder="Enter email" class="form-control input-md" type="text">
+    
+//   </div>
+// </div>
+
 	echo ' 
 <div class="row">
 <span class="title1" style="margin-left:40%;font-size:30px;"><b>Enter Feedback Details</b></span><br /><br />
@@ -538,14 +619,6 @@ echo '</table></div>';
 <fieldset>
 
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-12 control-label" for="email"></label>  
-  <div class="col-md-12">
-  <input id="email" name="email" placeholder="Enter email" class="form-control input-md" type="text">
-    
-  </div>
-</div>
 
 <!-- Text input-->
 <div class="form-group">
@@ -597,19 +670,46 @@ echo '</table></div>';
 //notice start
 if(@$_GET['q']== 11) 
 {
-$q=mysqli_query($con,"SELECT * FROM notice" )or die('Error201');
+
+echo '
+<div class="search"></div>
+<form name="search" action ="account.php?q=11" method="post"> 
+<input id="search" type="text" id ="search" name="search" placeholder="Type here"/>
+<input id="submit" type="submit" value="search"/>
+</form>
+ ';
+$search="";
+if(isset($_POST['search']))
+{
+  $search=$_POST['search'];
+}
+if(isset($search))
+{
+  echo $search;
+}
+//$search = $_GET['search'];
+$search=mysqli_escape_string($con,$search);
+$q=mysqli_query($con,"SELECT * FROM notice where uname='$search'" )or die('Error201');
+if(mysqli_num_rows($q)==0)
+{
+echo'<div class="panel">Enter the admin uname!!</div>';
+}
+else
+{
+
 echo  '<div class="panel">
+Notice(s) that have been written by the teacher with uname '.$search.'
 <table class="table table-striped title1" >
-<tr style="color:black"><td><b>Notice</b></td><td><b>By</b></td>';
+<tr style="color:black"><td><b>Notice</b></td>';
 $c=0;
 while($row=mysqli_fetch_array($q) )
 {
 $notice=$row['notice'];
-$uname=$row['uname'];
 $c++;
-echo '<tr><td>'.$notice.'</td><td>'.$uname.'</td></tr>';
+echo '<tr><td>'.$notice.'</td></tr>';
 }
 echo'</table></div>';
+}
 }?>
 </div></div></div></div>
 <!--Footer start-->

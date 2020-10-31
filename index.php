@@ -47,11 +47,18 @@ function validateForm()
 
 
 </head>
-
+<script language="javascript" type="text/javascript">
+window.history.forward(1);
+  setTimeout("disableBackButton()", 0);
+    $(document).ready(function () {
+       disableBackButton();
+    });
+</script>
 <body>
-<div class="header" style="background: #b92b27;  /* fallback for old browsers */
+
+<div class="header" style="background: grey;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #2b65C0, #b92b27);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #1565C0, #2be442); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #2B38C2, #33AACE); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 ">
 <div class="row">
 <div class="col-lg-6">
@@ -106,10 +113,7 @@ background: linear-gradient(to right, #1565C0, #2be442); /* W3C, IE 10+/ Edge, F
 </div><!--header row closed-->
 </div>
 
-<div class="bg1" style="background: #FFE000;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #799F0C, #FFE000);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-">
+<div class="bg1">
 <div class="row">
 
 <div class="col-md-7"></div>
@@ -200,13 +204,21 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
 </div><!--col-md-6 end-->
 </div></div>
 </div><!--container end-->
-
+</fieldset>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
 <!--Footer start-->
 
 
 <!-- Modal For Developers-->
 
-
+<footer>
 <!--Modal for admin login-->
 	 <div class="modal fade" id="login">
   <div class="modal-dialog">
@@ -224,7 +236,7 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
 <input type="text" name="aemail" maxlength="20"  placeholder="Admin email" class="form-control"/> 
 </div>
 <div class="form-group">
-<input type="password" name="password" maxlength="15" placeholder="Password" class="form-control"/>
+<input type="password" name="apassword" maxlength="15" placeholder="Password" class="form-control"/>
 </div>
 <div class="form-group" align="center">
 <input type="submit" name="login" value="Login" class="btn btn-primary" />
@@ -238,13 +250,42 @@ background: linear-gradient(to right, #799F0C, #4e53f4); /* W3C, IE 10+/ Edge, F
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="about" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><span style="color:orange;font-family:'typo' ">ABOUT</h4></span>
+        </div>
+        <div class="modal-body">
+          Name: Anirudh Kumar<br>
+          Reg No: 19BCI0246<br>
+          VIT VELLORE<br><br>
+          Name: Pratham Sahay<br>
+          Reg No: 19BCI0012<br>
+          VIT VELLORE<br><br>
+          Name: Devanshi Choudhary<br>
+          Reg No: 19BCE2614<br>
+          VIT VELLORE  
+        </div>
+       <!--  <img  src="image/bg.jpg" width="100" height="100"> -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 <div class="row footer">
  <div class="col-md-6 box">
-<a href="" target="_blank">About us</a>
+<a href="" data-toggle="modal" data-target="#about">About us</a>
 </div>
 <div class="col-md-6 box">
 <a href="#" data-toggle="modal" data-target="#login">Admin Login</a></div>
 </div>
+</footer>
 <!--footer end-->
-</body>
+
 </html>

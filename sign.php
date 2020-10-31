@@ -23,19 +23,19 @@ $mob = addslashes($mob);
 $password = stripslashes($password);
 $password = addslashes($password);
 
-// $to      = $email; // Send email to our user
-// $subject = 'Signup | Verification'; // Give the email a subject 
-// $message = '
+$to      = $email; // Send email to our user
+$subject = 'Signup | Verification'; // Give the email a subject 
+$message = '
   
-// Thanks for signing up!
-// Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+Thanks for signing up!
+Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
   
-// ------------------------
-// Username: '.$name.'
-// ------------------------
-// '; // Our message above including the link
+------------------------
+Username: '.$name.'
+------------------------
+'; // Our message above including the link
                       
-// $headers = 'From:vquiz.dmin.com'; // Set from headers
+$headers = 'From:vquiz.dmin.com'; // Set from headers
 $temp=mail($to, $subject, $message, $headers); 
 $password=md5($password);
 // echo $temp;
